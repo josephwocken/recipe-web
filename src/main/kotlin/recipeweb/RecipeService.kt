@@ -17,6 +17,11 @@ class RecipeService {
                                 "recipe-name",
                                 "contents",
                                 "link"
+                        ),
+                        Recipe(
+                                "sophie's recipe",
+                                "cook for 5 hours",
+                                "https://www.bbcgoodfood.com/recipes/egg-cress-club-sandwich"
                         )
                 )
         )

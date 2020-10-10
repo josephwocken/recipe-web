@@ -7,6 +7,7 @@ import com.google.inject.Scopes
 import recipeweb.handler.CreateRecipeHandler
 import recipeweb.handler.GetAllRecipesHandler
 import recipeweb.handler.RecipeHandler
+import recipeweb.handler.ResponseHeaderHandler
 
 class AppModule: AbstractModule() {
 
@@ -15,6 +16,7 @@ class AppModule: AbstractModule() {
         bind(GetAllRecipesHandler::class.java).`in`(Scopes.SINGLETON)
         bind(CreateRecipeHandler::class.java).`in`(Scopes.SINGLETON)
         bind(RecipeHandler::class.java).`in`(Scopes.SINGLETON)
+        bind(ResponseHeaderHandler::class.java).`in`(Scopes.SINGLETON)
         bind(ObjectMapper::class.java).toInstance(objectMapper())
     }
 
