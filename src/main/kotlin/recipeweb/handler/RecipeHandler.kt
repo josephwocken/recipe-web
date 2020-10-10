@@ -1,4 +1,4 @@
-package kotlinsandbox.handler
+package recipeweb.handler
 
 import com.google.inject.Inject
 import ratpack.handling.ByMethodSpec

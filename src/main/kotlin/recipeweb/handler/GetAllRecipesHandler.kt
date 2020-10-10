@@ -1,8 +1,8 @@
-package kotlinsandbox.handler
+package recipeweb.handler
 
 import com.google.inject.Inject
-import kotlinsandbox.Recipe
-import kotlinsandbox.RecipeService
+import recipeweb.Recipe
+import recipeweb.RecipeService
 import ratpack.handling.ByMethodSpec
 import ratpack.handling.Context
 import ratpack.handling.Handler

@@ -1,8 +1,8 @@
-package kotlinsandbox
+package recipeweb
 
-import kotlinsandbox.handler.CreateRecipeHandler
-import kotlinsandbox.handler.GetAllRecipesHandler
-import kotlinsandbox.handler.RecipeHandler
+import recipeweb.handler.CreateRecipeHandler
+import recipeweb.handler.GetAllRecipesHandler
+import recipeweb.handler.RecipeHandler
 import ratpack.guice.BindingsSpec
 import ratpack.guice.Guice
 import ratpack.handling.Chain

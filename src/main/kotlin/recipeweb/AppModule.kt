@@ -1,12 +1,12 @@
-package kotlinsandbox
+package recipeweb
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes
-import kotlinsandbox.handler.CreateRecipeHandler
-import kotlinsandbox.handler.GetAllRecipesHandler
-import kotlinsandbox.handler.RecipeHandler
+import recipeweb.handler.CreateRecipeHandler
+import recipeweb.handler.GetAllRecipesHandler
+import recipeweb.handler.RecipeHandler
 
 class AppModule: AbstractModule() {
 
