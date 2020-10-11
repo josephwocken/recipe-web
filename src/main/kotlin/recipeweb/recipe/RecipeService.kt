@@ -10,19 +10,16 @@ class RecipeService @Inject constructor(
 ) {
 
     fun getRecipe(recipeId: String): Promise<Recipe?> {
+        println("getting recipe $recipeId")
         return recipeDao.selectRecipeById(recipeId)
     }
 
     fun createRecipe(recipe: CreateRecipeRequest): Operation {
-        return Operation.of {
-            recipeDao.createRecipe(recipe)
-        }
+        return recipeDao.createRecipe(recipe)
     }
 
     fun getAllRecipes(): Promise<List<Recipe>> {
-        return Promise.value(
-                recipeDao.selectAllRecipes()
-        )
+        return recipeDao.selectAllRecipes()
     }
 
 }

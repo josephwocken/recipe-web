@@ -2,6 +2,7 @@ package recipeweb.recipe
 
 import com.google.inject.Inject
 import ratpack.exec.Blocking
+import ratpack.exec.Operation
 import ratpack.exec.Promise
 import java.sql.Connection
 import java.sql.ResultSet
@@ -26,20 +27,24 @@ class RecipeDao @Inject constructor(
         }
     }
 
-    fun selectAllRecipes(): List<Recipe> {
+    fun selectAllRecipes(): Promise<List<Recipe>> {
         val selectAll = "SELECT * FROM recipe"
         var recipes: List<Recipe> = listOf()
-        connection.createStatement().use { statement: Statement ->
-            val rs = statement.executeQuery(selectAll)
-            recipes = mapToRecipes(rs)
+        return Blocking.get {
+            connection.createStatement().use { statement: Statement ->
+                val rs = statement.executeQuery(selectAll)
+                recipes = mapToRecipes(rs)
+            }
+            recipes
         }
-        return recipes
     }
 
-    fun createRecipe(recipe: CreateRecipeRequest) {
+    fun createRecipe(recipe: CreateRecipeRequest): Operation {
         val insertRecipe = "INSERT INTO recipe (name, content) VALUES ('${recipe.name}','${recipe.content}')"
-        connection.createStatement().use { statement: Statement ->
-            statement.executeUpdate(insertRecipe)
+        return Blocking.op {
+            connection.createStatement().use { statement: Statement ->
+                statement.executeUpdate(insertRecipe)
+            }
         }
     }
 
