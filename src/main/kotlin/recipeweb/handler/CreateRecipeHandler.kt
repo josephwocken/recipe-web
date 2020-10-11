@@ -2,13 +2,12 @@ package recipeweb.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Inject
-import recipeweb.Recipe
-import recipeweb.RecipeService
-import ratpack.exec.Promise
+import recipeweb.recipe.Recipe
+import recipeweb.recipe.RecipeService
 import ratpack.handling.Context
 import ratpack.handling.Handler
 import ratpack.http.TypedData
-import ratpack.jackson.Jackson.json
+import recipeweb.recipe.CreateRecipeRequest
 
 class CreateRecipeHandler @Inject constructor(
         private val recipeService: RecipeService,
@@ -18,25 +17,20 @@ class CreateRecipeHandler @Inject constructor(
     override fun handle(ctx: Context) {
         ctx.request.body
                 .map { typedData: TypedData? ->
-                    val recipe: Recipe = objectMapper.readValue(
+                    val recipe: CreateRecipeRequest = objectMapper.readValue(
                             typedData!!.text,
-                            Recipe::class.java
+                            CreateRecipeRequest::class.java
                     )
                     println("recipe: ${objectMapper.writeValueAsString(recipe)}")
                     recipe
                 }
-                .nextOp { recipe: Recipe ->
+                .nextOp { recipe: CreateRecipeRequest ->
                     recipeService.createRecipe(recipe)
                 }
-                .then { recipe: Recipe ->
-                    ctx.response
-                            .headers
-                            .add("Content-Type", "application/json")
+                .then {
                     ctx.response
                             .status(201)
-                            .send(
-                                    objectMapper.writeValueAsString(recipe)
-                            )
+                            .send()
                 }
     }
 }

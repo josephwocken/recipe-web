@@ -6,6 +6,7 @@ import ratpack.guice.Guice
 import ratpack.handling.Chain
 import ratpack.server.RatpackServer
 import ratpack.server.RatpackServerSpec
+import recipeweb.handler.GetRecipeByIdHandler
 import recipeweb.handler.ResponseHeaderHandler
 
 fun main(args: Array<String>) {
@@ -17,6 +18,7 @@ fun main(args: Array<String>) {
         )
         serverSpec.handlers { chain: Chain ->
             chain.all(ResponseHeaderHandler::class.java)
+            chain.get("recipes/:id", GetRecipeByIdHandler::class.java)
             chain.path("recipes", RecipeHandler::class.java)
         }
     }
