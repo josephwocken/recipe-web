@@ -3,23 +3,39 @@ package recipeweb
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.inject.AbstractModule
+import com.google.inject.Provides
 import com.google.inject.Scopes
+import com.google.inject.Singleton
+import com.google.inject.name.Named
+import com.google.inject.name.Names
 import recipeweb.handler.*
 import recipeweb.recipe.RecipeService
+import java.io.FileReader
+import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
+import java.util.*
 
 class AppModule: AbstractModule() {
 
     override fun configure() {
+        val path = System.getProperty("app.config", "C:\\tmp\\app.properties")
+        try {
+            val properties = Properties()
+            properties.load(FileReader(path))
+            Names.bindProperties(binder(), properties)
+        } catch (ex: IOException) {
+            println("Failed to read in properties from $path" + ex.message)
+            throw ex
+        }
         bind(RecipeService::class.java).`in`(Scopes.SINGLETON)
         bind(GetAllRecipesHandler::class.java).`in`(Scopes.SINGLETON)
         bind(CreateRecipeHandler::class.java).`in`(Scopes.SINGLETON)
         bind(GetRecipeByIdHandler::class.java).`in`(Scopes.SINGLETON)
         bind(RecipeHandler::class.java).`in`(Scopes.SINGLETON)
         bind(ResponseHeaderHandler::class.java).`in`(Scopes.SINGLETON)
+        bind(HealthHandler::class.java).`in`(Scopes.SINGLETON)
         bind(ObjectMapper::class.java).toInstance(objectMapper())
-        bind(Connection::class.java).toInstance(connection())
     }
 
     private fun objectMapper(): ObjectMapper {
@@ -27,12 +43,23 @@ class AppModule: AbstractModule() {
                 .registerModule(KotlinModule())
     }
 
-    private fun connection(): Connection {
-        return DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/postgres",
-                "postgres",
-                "postgres"
-        )
+    @Provides
+    @Singleton
+    fun connection(
+            @Named("dbUrl") dbUrl: String,
+            @Named("dbUsername") dbUsername: String,
+            @Named("dbPassword") dbPassword: String
+    ): Connection {
+        try {
+            return DriverManager.getConnection(
+                    dbUrl,
+                    dbUsername,
+                    dbPassword
+            )
+        } catch (ex: Exception) {
+            println("Failed to get connection to postgres. " + ex.message)
+            throw ex
+        }
     }
 
 }
