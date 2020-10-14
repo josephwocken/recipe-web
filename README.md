@@ -1,6 +1,6 @@
 ## recipe-web
 
-### build
+### how to build
 ```
 ./gradlew clean build
 
@@ -11,9 +11,16 @@ Mode                LastWriteTime         Length Name
 -a----       10/13/2020   9:33 PM          34168 recipe-web.jar
 ```
 
-### run
+### how to run
 ```
 java -Dapp.config=</path/to/config> -jar recipe-web-all.jar
+```
+
+### application configuration
+```
+dbUrl=jdbc:postgresql://localhost:5432/postgres
+dbUsername=
+dbPassword=
 ```
 
 ### future features
