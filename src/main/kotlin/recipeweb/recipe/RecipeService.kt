@@ -4,8 +4,10 @@ import com.google.inject.Inject
 import ratpack.exec.Operation
 import ratpack.exec.Promise
 import recipeweb.recipe.Recipe
+import recipeweb.user.UserService
 
 class RecipeService @Inject constructor(
+        private val userService: UserService,
         private val recipeDao: RecipeDao
 ) {
 
@@ -15,7 +17,8 @@ class RecipeService @Inject constructor(
     }
 
     fun createRecipe(recipe: CreateRecipeRequest): Operation {
-        return recipeDao.createRecipe(recipe)
+        return userService.validatePassword(recipe.password)
+                .next(recipeDao.createRecipe(recipe))
     }
 
     fun getAllRecipes(): Promise<List<Recipe>> {

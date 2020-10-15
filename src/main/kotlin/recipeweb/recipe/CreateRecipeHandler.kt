@@ -1,13 +1,12 @@
-package recipeweb.handler
+package recipeweb.recipe
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Inject
-import recipeweb.recipe.Recipe
-import recipeweb.recipe.RecipeService
 import ratpack.handling.Context
 import ratpack.handling.Handler
 import ratpack.http.TypedData
-import recipeweb.recipe.CreateRecipeRequest
+import recipeweb.auth.UnAuthorizedException
+import recipeweb.user.UserService
 
 class CreateRecipeHandler @Inject constructor(
         private val recipeService: RecipeService,
@@ -27,6 +26,13 @@ class CreateRecipeHandler @Inject constructor(
                 .nextOp { recipe: CreateRecipeRequest ->
                     recipeService.createRecipe(recipe)
                 }
+                .mapError(
+                        UnAuthorizedException::class.java,
+                        { unAuthorizedException: UnAuthorizedException ->
+                            println("Failed to create recipe because of authorization failure. ${unAuthorizedException.message}")
+                            throw unAuthorizedException
+                        }
+                )
                 .then {
                     ctx.response
                             .status(201)

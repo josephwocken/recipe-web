@@ -1,6 +1,8 @@
 package recipeweb
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
@@ -8,8 +10,11 @@ import com.google.inject.Scopes
 import com.google.inject.Singleton
 import com.google.inject.name.Named
 import com.google.inject.name.Names
+import recipeweb.error.RecipeServerErrorHandler
 import recipeweb.handler.*
-import recipeweb.recipe.RecipeService
+import recipeweb.recipe.*
+import recipeweb.user.UserDao
+import recipeweb.user.UserService
 import java.io.FileReader
 import java.io.IOException
 import java.sql.Connection
@@ -35,12 +40,10 @@ class AppModule: AbstractModule() {
         bind(RecipeHandler::class.java).`in`(Scopes.SINGLETON)
         bind(ResponseHeaderHandler::class.java).`in`(Scopes.SINGLETON)
         bind(HealthHandler::class.java).`in`(Scopes.SINGLETON)
-        bind(ObjectMapper::class.java).toInstance(objectMapper())
-    }
-
-    private fun objectMapper(): ObjectMapper {
-        return ObjectMapper()
-                .registerModule(KotlinModule())
+        bind(ObjectMapper::class.java).toInstance(MapperUtil.getObjectMapper())
+        bind(UserDao::class.java).`in`(Scopes.SINGLETON)
+        bind(UserService::class.java).`in`(Scopes.SINGLETON)
+        bind(RecipeServerErrorHandler::class.java).`in`(Scopes.SINGLETON)
     }
 
     @Provides

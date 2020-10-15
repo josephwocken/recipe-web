@@ -1,4 +1,4 @@
-package recipeweb.handler
+package recipeweb.recipe
 
 import com.google.inject.Inject
 import ratpack.handling.Context
