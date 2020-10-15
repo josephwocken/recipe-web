@@ -10,8 +10,8 @@ class UserService @Inject constructor(
 
     fun validatePassword(providedPwd: String): Operation {
         return userDao.selectMasterPassword()
-                .next { dbPassword: String ->
-                    if (dbPassword != providedPwd) {
+                .next { dbPassword: String? ->
+                    if (null === dbPassword || dbPassword != providedPwd) {
                         throw UnAuthorizedException()
                     }
                 }

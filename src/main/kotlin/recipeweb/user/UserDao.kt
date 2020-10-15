@@ -10,19 +10,23 @@ class UserDao @Inject constructor(
         private val connection: Connection
 ) {
 
-    fun selectMasterPassword(): Promise<String> {
-        val selectPwd = "SELECT password FROM public.user " +
-                "WHERE id = 1"
+    fun selectMasterPassword(): Promise<String?> {
+        val selectPwd = "SELECT * FROM public.user WHERE id = 1"
         return Blocking.get {
             var password: String? = null
             connection.createStatement().use { statement: Statement ->
-                val rs = statement.executeQuery(selectPwd)
-                while (rs.next()) {
-                    password = rs.getString("password")
-                    return@use
+                try {
+                    val rs = statement.executeQuery(selectPwd)
+                    while (rs.next()) {
+                        password = rs.getString("password")
+                        return@use
+                    }
+                } catch (exception: Exception) {
+                    println("Failed to select master password. ${exception.message}")
+                    throw exception
                 }
             }
-            password!!
+            password
         }
     }
 
