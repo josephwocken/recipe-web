@@ -60,6 +60,21 @@ class RecipeDao @Inject constructor(
         }
     }
 
+    fun deleteRecipe(recipeId: String): Operation {
+        val deleteRecipe = "DELETE FROM recipe WHERE id = $recipeId"
+        return Blocking.get {
+                    connection.createStatement().use { statement: Statement ->
+                        try {
+                            statement.executeUpdate(deleteRecipe)
+                        } catch (exception: Exception) {
+                            println("Failed to delete recipe $recipeId. ${exception.message}")
+                            throw exception
+                        }
+                    }
+                }
+                .operation()
+    }
+
     private fun mapToRecipes(resultSet: ResultSet): List<Recipe> {
         val recipes: MutableList<Recipe> = mutableListOf()
         while (resultSet.next()) {

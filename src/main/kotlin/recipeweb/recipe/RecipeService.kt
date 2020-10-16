@@ -25,4 +25,8 @@ class RecipeService @Inject constructor(
         return recipeDao.selectAllRecipes()
     }
 
+    fun deleteRecipe(recipeId: String): Operation {
+        return recipeDao.deleteRecipe(recipeId)
+    }
+
 }

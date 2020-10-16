@@ -4,5 +4,4 @@ CREATE TABLE public.user
     password text COLLATE pg_catalog."default" NOT NULL
 );
 
-INSERT INTO public."user"(password)
-	VALUES ('test-pwd');
+INSERT INTO public."user"(password) VALUES ('test-pwd');
