@@ -5,6 +5,7 @@ import com.google.inject.Inject
 import ratpack.handling.Context
 import ratpack.handling.Handler
 import ratpack.http.TypedData
+import ratpack.jackson.Jackson.json
 import recipeweb.auth.UnAuthorizedException
 import recipeweb.user.UserService
 
@@ -23,7 +24,7 @@ class CreateRecipeHandler @Inject constructor(
                     println("recipe: ${objectMapper.writeValueAsString(recipe)}")
                     recipe
                 }
-                .nextOp { recipe: CreateRecipeRequest ->
+                .flatMap { recipe: CreateRecipeRequest ->
                     recipeService.createRecipe(recipe)
                 }
                 .mapError(
@@ -33,10 +34,16 @@ class CreateRecipeHandler @Inject constructor(
                             throw unAuthorizedException
                         }
                 )
-                .then {
-                    ctx.response
-                            .status(201)
-                            .send()
+                .next { recipe: Recipe? ->
+                    if (null === recipe) {
+                        throw RecipeCreateException()
+                    }
+                }
+                .then { recipe: Recipe? ->
+                    ctx.render(json(recipe))
+//                    ctx.response
+//                            .status(201)
+//                            .send()
                 }
     }
 }

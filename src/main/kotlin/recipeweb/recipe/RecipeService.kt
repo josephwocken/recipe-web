@@ -16,9 +16,10 @@ class RecipeService @Inject constructor(
         return recipeDao.selectRecipeById(recipeId)
     }
 
-    fun createRecipe(recipe: CreateRecipeRequest): Operation {
+    fun createRecipe(recipe: CreateRecipeRequest): Promise<Recipe?> {
         return userService.validatePassword(recipe.password)
                 .next(recipeDao.createRecipe(recipe))
+                .flatMap(recipeDao.getRecipeByName(recipe.name))
     }
 
     fun getAllRecipes(): Promise<List<Recipe>> {

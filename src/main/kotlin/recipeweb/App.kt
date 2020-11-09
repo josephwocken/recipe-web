@@ -9,6 +9,7 @@ import ratpack.server.RatpackServerSpec
 import ratpack.server.ServerConfigBuilder
 import recipeweb.handler.HealthHandler
 import recipeweb.handler.ResponseHeaderHandler
+import recipeweb.image.ImageEndpoint
 import recipeweb.recipe.RecipeEndpoint
 
 fun main(args: Array<String>) {
@@ -30,6 +31,7 @@ fun main(args: Array<String>) {
             chain.all(ResponseHeaderHandler::class.java)
             chain.get("health", HealthHandler::class.java)
             chain.prefix("recipes", RecipeEndpoint::class.java)
+            chain.prefix("images", ImageEndpoint::class.java)
         }
     }
 }

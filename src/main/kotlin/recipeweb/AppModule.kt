@@ -1,9 +1,6 @@
 package recipeweb
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import com.google.inject.Scopes
@@ -12,6 +9,9 @@ import com.google.inject.name.Named
 import com.google.inject.name.Names
 import recipeweb.error.RecipeServerErrorHandler
 import recipeweb.handler.*
+import recipeweb.image.ImageEndpoint
+import recipeweb.image.PostImageHandler
+import recipeweb.image.ImageService
 import recipeweb.recipe.*
 import recipeweb.user.UserDao
 import recipeweb.user.UserService
@@ -45,6 +45,11 @@ class AppModule: AbstractModule() {
         bind(UserDao::class.java).`in`(Scopes.SINGLETON)
         bind(UserService::class.java).`in`(Scopes.SINGLETON)
         bind(RecipeServerErrorHandler::class.java).`in`(Scopes.SINGLETON)
+
+        // images
+        bind(ImageService::class.java).`in`(Scopes.SINGLETON)
+        bind(PostImageHandler::class.java).`in`(Scopes.SINGLETON)
+        bind(ImageEndpoint::class.java).`in`(Scopes.SINGLETON)
     }
 
     @Provides

@@ -60,6 +60,28 @@ class RecipeDao @Inject constructor(
         }
     }
 
+    fun getRecipeByName(name: String): Promise<Recipe?> {
+        val selectRecipeByName = "SELECT id, name, content, created, last_modified " +
+                "FROM recipe " +
+                "WHERE name = '$name'"
+        var recipe: Recipe? = null
+        return Blocking.get {
+            connection.createStatement().use { statement: Statement ->
+                try {
+                    val rs = statement.executeQuery(selectRecipeByName)
+                    while (rs.next()) {
+                        recipe = mapToRecipe(rs)
+                        return@use
+                    }
+                } catch (exception: Exception) {
+                    println("Failed to get recipe by name. ${exception.message}")
+                    throw exception
+                }
+            }
+            recipe
+        }
+    }
+
     fun deleteRecipe(recipeId: String): Operation {
         val deleteRecipe = "DELETE FROM recipe WHERE id = $recipeId"
         return Blocking.get {

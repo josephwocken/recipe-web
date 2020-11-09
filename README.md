@@ -34,13 +34,8 @@ dbPassword=
     * by create time
     * by update time
     * by rank
-* password requirement when creating recipe
-    * password table with one entry
-    * do simple string match with provided input
-    * if fail, http 403
-    * if success, create recipe, http 201
-    * all in the web project
 * add authentication header to backend
     * auth handler
     * static uuid probably
     * depends on front end external config (above)
+* finish image upload
