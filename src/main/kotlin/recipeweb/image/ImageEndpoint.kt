@@ -7,13 +7,15 @@ import ratpack.handling.Chain
 import ratpack.handling.Context
 
 class ImageEndpoint @Inject constructor(
-        private val postImageHandler: PostImageHandler
+        private val createImageHandler: CreateImageHandler,
+        private val getImagesByRecipeIdHandler: GetImagesByRecipeIdHandler
 ): Action<Chain> {
 
     override fun execute(chain: Chain) {
         chain.path(":recipeId") { context: Context ->
             context.byMethod { byMethodSpec: ByMethodSpec ->
-                byMethodSpec.post(postImageHandler)
+                byMethodSpec.post(createImageHandler)
+                byMethodSpec.get(getImagesByRecipeIdHandler)
             }
         }
     }

@@ -9,5 +9,6 @@ data class Image(
 
 data class CreateImageRequest(
         val name: String,
+        val recipeId: Int,
         val image: ByteArray
 )

@@ -10,7 +10,8 @@ import com.google.inject.name.Names
 import recipeweb.error.RecipeServerErrorHandler
 import recipeweb.handler.*
 import recipeweb.image.ImageEndpoint
-import recipeweb.image.PostImageHandler
+import recipeweb.image.CreateImageHandler
+import recipeweb.image.GetImagesByRecipeIdHandler
 import recipeweb.image.ImageService
 import recipeweb.recipe.*
 import recipeweb.user.UserDao
@@ -48,7 +49,8 @@ class AppModule: AbstractModule() {
 
         // images
         bind(ImageService::class.java).`in`(Scopes.SINGLETON)
-        bind(PostImageHandler::class.java).`in`(Scopes.SINGLETON)
+        bind(CreateImageHandler::class.java).`in`(Scopes.SINGLETON)
+        bind(GetImagesByRecipeIdHandler::class.java).`in`(Scopes.SINGLETON)
         bind(ImageEndpoint::class.java).`in`(Scopes.SINGLETON)
     }
 
