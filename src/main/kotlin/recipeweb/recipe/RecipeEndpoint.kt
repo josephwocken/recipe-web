@@ -10,7 +10,8 @@ class RecipeEndpoint @Inject constructor(
         private val createRecipeHandler: CreateRecipeHandler,
         private val getAllRecipesHandler: GetAllRecipesHandler,
         private val getRecipeByIdHandler: GetRecipeByIdHandler,
-        private val deleteRecipeHandler: DeleteRecipeHandler
+        private val deleteRecipeHandler: DeleteRecipeHandler,
+        private val updateRecipeHandler: UpdateRecipeHandler
 ): Action<Chain> {
     override fun execute(chain: Chain) {
         chain.path("") { context: Context ->
@@ -22,6 +23,7 @@ class RecipeEndpoint @Inject constructor(
                 .path(":id") { context: Context ->
                     context.byMethod { byMethodSpec: ByMethodSpec ->
                         byMethodSpec.get(getRecipeByIdHandler)
+                        byMethodSpec.put(updateRecipeHandler)
                         byMethodSpec.delete(deleteRecipeHandler)
                     }
                 }

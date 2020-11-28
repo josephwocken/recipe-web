@@ -40,6 +40,7 @@ class AppModule: AbstractModule() {
         bind(CreateRecipeHandler::class.java).`in`(Scopes.SINGLETON)
         bind(GetRecipeByIdHandler::class.java).`in`(Scopes.SINGLETON)
         bind(DeleteRecipeHandler::class.java).`in`(Scopes.SINGLETON)
+        bind(UpdateRecipeHandler::class.java).`in`(Scopes.SINGLETON)
         bind(ResponseHeaderHandler::class.java).`in`(Scopes.SINGLETON)
         bind(HealthHandler::class.java).`in`(Scopes.SINGLETON)
         bind(ObjectMapper::class.java).toInstance(MapperUtil.getObjectMapper())

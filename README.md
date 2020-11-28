@@ -25,6 +25,10 @@ dbPassword=
 
 ### future features
 * ability to update an existing recipe
+    * include uploading a new image
+* size image and recipe contents to same widths
+    * attempted, but no such luck so far
+* bold, italics, and underline formatting in create recipe
 * form validation for javascript on create recipe
 * favorited recipes
     * new table for user

@@ -4,6 +4,7 @@ import com.google.inject.Inject
 import ratpack.exec.Blocking
 import ratpack.exec.Operation
 import ratpack.exec.Promise
+import ratpack.func.Action
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -95,6 +96,63 @@ class RecipeDao @Inject constructor(
                     }
                 }
                 .operation()
+    }
+
+    fun updateRecipe(name: String, content: String, recipeId: String): Promise<Recipe> {
+        val updateRecipeName = "UPDATE recipe SET name = '$name' " +
+                "WHERE id = ${recipeId.toInt()}"
+        val updateRecipeContent = "UPDATE recipe SET content = '$content' " +
+                "WHERE id = ${recipeId.toInt()}"
+        return selectRecipeById(recipeId)
+                .map { recipe: Recipe? ->
+                    if (null === recipe) {
+                        throw RecipeUpdateException()
+                    }
+                    recipe!!
+                }
+                .nextOp { recipe: Recipe ->
+                    if (recipe.name !== name) {
+                        Blocking.get {
+                            connection.createStatement().use { statement: Statement ->
+                                try {
+                                    statement.executeUpdate(updateRecipeName)
+                                } catch (exception: Exception) {
+                                    println("Failed to update recipe name. recipe-id=$recipeId. ${exception.message}")
+                                    throw exception
+                                }
+                            }
+                        }
+                                .operation()
+                    } else {
+                        Operation.noop()
+                    }
+                }
+                .nextOp { recipe: Recipe ->
+                    if (recipe.content !== content) {
+                        Blocking.get {
+                            connection.createStatement().use { statement: Statement ->
+                                try {
+                                    statement.executeUpdate(updateRecipeContent)
+                                } catch (exception: Exception) {
+                                    println("Failed to update recipe content. $recipeId. ${exception.message}")
+                                    throw exception
+                                }
+                            }
+                        }
+                                .operation()
+                    } else {
+                        Operation.noop()
+                    }
+                }
+                .flatMap {
+                    selectRecipeById(recipeId)
+                }
+                .map { recipe: Recipe? ->
+                    if (null === recipe) {
+                        throw RecipeUpdateException()
+                    }
+                    recipe
+                }
     }
 
     private fun mapToRecipes(resultSet: ResultSet): List<Recipe> {
