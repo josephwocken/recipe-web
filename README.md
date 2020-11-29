@@ -25,7 +25,7 @@ dbPassword=
 
 ### future features
 * ability to update an existing recipe
-    * include uploading a new image
+    * change password field to plain text so dashlane doesn't autofill
 * size image and recipe contents to same widths
     * attempted, but no such luck so far
 * bold, italics, and underline formatting in create recipe
@@ -42,4 +42,4 @@ dbPassword=
     * auth handler
     * static uuid probably
     * depends on front end external config (above)
-* finish image upload
+* ability to upload more than 1 image
