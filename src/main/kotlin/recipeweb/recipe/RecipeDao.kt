@@ -98,7 +98,7 @@ class RecipeDao @Inject constructor(
                 .operation()
     }
 
-    fun updateRecipe(name: String, content: String, recipeId: String): Promise<Recipe> {
+    fun updateRecipe(name: String?, content: String?, recipeId: String): Promise<Recipe> {
         val updateRecipeName = "UPDATE recipe SET name = '$name' " +
                 "WHERE id = ${recipeId.toInt()}"
         val updateRecipeContent = "UPDATE recipe SET content = '$content' " +
@@ -111,7 +111,7 @@ class RecipeDao @Inject constructor(
                     recipe!!
                 }
                 .nextOp { recipe: Recipe ->
-                    if (recipe.name !== name) {
+                    if (name !== null && recipe.name !== name) {
                         Blocking.get {
                             connection.createStatement().use { statement: Statement ->
                                 try {
@@ -128,7 +128,7 @@ class RecipeDao @Inject constructor(
                     }
                 }
                 .nextOp { recipe: Recipe ->
-                    if (recipe.content !== content) {
+                    if (content !== null && recipe.content !== content) {
                         Blocking.get {
                             connection.createStatement().use { statement: Statement ->
                                 try {

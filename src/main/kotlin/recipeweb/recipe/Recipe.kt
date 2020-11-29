@@ -29,7 +29,7 @@ data class CreateRecipeRequest(
 
 data class UpdateRecipeRequest(
         val recipeId: String,
-        val name: String,
-        val content: String,
+        val name: String?,
+        val content: String?,
         val password: String
 )
