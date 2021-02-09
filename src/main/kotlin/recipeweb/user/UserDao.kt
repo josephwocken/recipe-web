@@ -1,14 +1,21 @@
 package recipeweb.user
 
 import com.google.inject.Inject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import ratpack.exec.Blocking
 import ratpack.exec.Promise
+import recipeweb.recipe.UpdateRecipeHandler
 import java.sql.Connection
 import java.sql.Statement
 
 class UserDao @Inject constructor(
         private val connection: Connection
 ) {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(UserDao::class.java)
+    }
 
     fun selectMasterPassword(): Promise<String?> {
         val selectPwd = "SELECT * FROM public.user WHERE id = 1"
@@ -22,7 +29,7 @@ class UserDao @Inject constructor(
                         return@use
                     }
                 } catch (exception: Exception) {
-                    println("Failed to select master password. ${exception.message}")
+                    log.error("Failed to select master password", exception)
                     throw exception
                 }
             }

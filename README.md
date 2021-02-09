@@ -29,6 +29,7 @@ dbPassword=
 * size image and recipe contents to same widths
     * attempted, but no such luck so far
 * bold, italics, and underline formatting in create recipe
+    * https://draftjs.org/docs/advanced-topics-entities
 * form validation for javascript on create recipe
 * favorited recipes
     * new table for user
@@ -43,3 +44,6 @@ dbPassword=
     * static uuid probably
     * depends on front end external config (above)
 * ability to upload more than 1 image
+* handle escaping apostraphe in string of recipe update (title for sure, not sure about content)
+* log file for web app
+* don't show empty image icon when no image for recipe

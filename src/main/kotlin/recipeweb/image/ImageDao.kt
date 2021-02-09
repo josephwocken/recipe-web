@@ -1,6 +1,8 @@
 package recipeweb.image
 
 import com.google.inject.Inject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import ratpack.exec.Blocking
 import ratpack.exec.Operation
 import ratpack.exec.Promise
@@ -12,6 +14,10 @@ import java.sql.Statement
 class ImageDao @Inject constructor(
         private val connection: Connection
 ) {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(ImageDao::class.java)
+    }
 
     // https://www.postgresql.org/docs/7.4/jdbc-binary-data.html
     fun saveImage(createImageRequest: CreateImageRequest): Operation {
@@ -27,7 +33,7 @@ class ImageDao @Inject constructor(
             try {
                 pStatement.executeUpdate()
             } catch (exception: Exception) {
-                println("Failed to save image. ${exception.message}")
+                log.error("Failed to save image.", exception)
                 throw exception
             }
         }
@@ -46,7 +52,7 @@ class ImageDao @Inject constructor(
                         return@use
                     }
                 } catch (exception: Exception) {
-                    println("Failed to read images for recipe-id=$recipeId. $exception.message")
+                    log.error("Failed to read images for recipe-id=$recipeId", exception)
                     throw exception
                 }
             }

@@ -2,6 +2,8 @@ package recipeweb.recipe
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Inject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import ratpack.handling.Context
 import ratpack.handling.Handler
 import ratpack.http.TypedData
@@ -12,6 +14,11 @@ class UpdateRecipeHandler @Inject constructor(
         private val recipeService: RecipeService,
         private val objectMapper: ObjectMapper
 ): Handler {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(UpdateRecipeHandler::class.java)
+    }
+
     override fun handle(ctx: Context) {
         ctx.request.body
                 .map { typedData: TypedData? ->
@@ -19,7 +26,7 @@ class UpdateRecipeHandler @Inject constructor(
                             typedData!!.text,
                             UpdateRecipeRequest::class.java
                     )
-                    println("recipe: ${objectMapper.writeValueAsString(recipe)}")
+                    log.info("recipe: ${objectMapper.writeValueAsString(recipe)}")
                     recipe
                 }
                 .flatMap { recipe: UpdateRecipeRequest ->
@@ -28,7 +35,7 @@ class UpdateRecipeHandler @Inject constructor(
                 .mapError(
                         UnAuthorizedException::class.java,
                         { unAuthorizedException: UnAuthorizedException ->
-                            println("Failed to update recipe because of authorization failure. ${unAuthorizedException.message}")
+                            log.error("Failed to update recipe because of authorization failure", unAuthorizedException)
                             throw unAuthorizedException
                         }
                 )

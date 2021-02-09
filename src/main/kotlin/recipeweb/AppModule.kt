@@ -7,6 +7,8 @@ import com.google.inject.Scopes
 import com.google.inject.Singleton
 import com.google.inject.name.Named
 import com.google.inject.name.Names
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import recipeweb.error.RecipeServerErrorHandler
 import recipeweb.handler.*
 import recipeweb.image.ImageEndpoint
@@ -24,15 +26,19 @@ import java.util.*
 
 class AppModule: AbstractModule() {
 
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(AppModule::class.java)
+    }
+
     override fun configure() {
         val path = System.getProperty("app.config", "C:\\tmp\\app.properties")
         try {
             val properties = Properties()
             properties.load(FileReader(path))
             Names.bindProperties(binder(), properties)
-        } catch (ex: IOException) {
-            println("Failed to read in properties from $path" + ex.message)
-            throw ex
+        } catch (exception: IOException) {
+            log.error("Failed to read in properties from $path", exception)
+            throw exception
         }
         bind(RecipeService::class.java).`in`(Scopes.SINGLETON)
         bind(RecipeEndpoint::class.java).`in`(Scopes.SINGLETON)
@@ -68,9 +74,9 @@ class AppModule: AbstractModule() {
                     dbUsername,
                     dbPassword
             )
-        } catch (ex: Exception) {
-            println("Failed to get connection to postgres. " + ex.message)
-            throw ex
+        } catch (exception: Exception) {
+            log.error("Failed to get connection to postgres", exception)
+            throw exception
         }
     }
 

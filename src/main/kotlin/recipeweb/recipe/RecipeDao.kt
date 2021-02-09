@@ -1,10 +1,13 @@
 package recipeweb.recipe
 
 import com.google.inject.Inject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import ratpack.exec.Blocking
 import ratpack.exec.Operation
 import ratpack.exec.Promise
 import ratpack.func.Action
+import recipeweb.image.CreateImageHandler
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -15,6 +18,10 @@ import java.time.ZoneId
 class RecipeDao @Inject constructor(
         private val connection: Connection
 ) {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(RecipeDao::class.java)
+    }
 
     fun selectRecipeById(recipeId: String): Promise<Recipe?> {
         val selectById = "SELECT id, name, content, created, last_modified " +
@@ -75,7 +82,7 @@ class RecipeDao @Inject constructor(
                         return@use
                     }
                 } catch (exception: Exception) {
-                    println("Failed to get recipe by name. ${exception.message}")
+                    log.error("Failed to get recipe by name.", exception)
                     throw exception
                 }
             }
@@ -90,7 +97,7 @@ class RecipeDao @Inject constructor(
                         try {
                             statement.executeUpdate(deleteRecipe)
                         } catch (exception: Exception) {
-                            println("Failed to delete recipe $recipeId. ${exception.message}")
+                            log.error("Failed to delete recipe. recipe-id=$recipeId", exception)
                             throw exception
                         }
                     }
@@ -117,7 +124,7 @@ class RecipeDao @Inject constructor(
                                 try {
                                     statement.executeUpdate(updateRecipeName)
                                 } catch (exception: Exception) {
-                                    println("Failed to update recipe name. recipe-id=$recipeId. ${exception.message}")
+                                    log.error("Failed to update recipe name. recipe-id=$recipeId", exception)
                                     throw exception
                                 }
                             }
@@ -134,7 +141,7 @@ class RecipeDao @Inject constructor(
                                 try {
                                     statement.executeUpdate(updateRecipeContent)
                                 } catch (exception: Exception) {
-                                    println("Failed to update recipe content. $recipeId. ${exception.message}")
+                                    log.error("Failed to update recipe content. recipe-id=$recipeId", exception)
                                     throw exception
                                 }
                             }

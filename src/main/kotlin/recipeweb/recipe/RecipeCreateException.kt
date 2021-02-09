@@ -1,4 +1,3 @@
 package recipeweb.recipe
 
-class RecipeCreateException: RuntimeException() {
-}
+class RecipeCreateException: RuntimeException()

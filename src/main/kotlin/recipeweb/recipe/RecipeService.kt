@@ -1,6 +1,8 @@
 package recipeweb.recipe
 
 import com.google.inject.Inject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import ratpack.exec.Operation
 import ratpack.exec.Promise
 import recipeweb.recipe.Recipe
@@ -11,8 +13,12 @@ class RecipeService @Inject constructor(
         private val recipeDao: RecipeDao
 ) {
 
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(RecipeService::class.java)
+    }
+
     fun getRecipe(recipeId: String): Promise<Recipe?> {
-        println("getting recipe $recipeId")
+        log.info("getting recipe $recipeId")
         return recipeDao.selectRecipeById(recipeId)
     }
 
