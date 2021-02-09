@@ -1,19 +1,10 @@
 <configuration>
-
-
-    <property name="HOME_LOG_DIR" value="/var/log/recipe-web"/>
-
-    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>"${HOME_LOG_DIR}/recipe-web.log"</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${HOME_LOG_DIR}/archived/recipe-web.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <maxFileSize>5MB</maxFileSize>
-            <totalSizeCap>5GB</totalSizeCap>
-            <maxHistory>20</maxHistory>
-        </rollingPolicy>
-
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/recipe-web/recipe-web.log</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
         <encoder>
-            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -27,7 +18,6 @@
 
     <root level="error">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE-ROLLING"/>
+        <appender-ref ref="FILE"/>
     </root>
-
 </configuration>

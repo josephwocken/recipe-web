@@ -44,6 +44,6 @@ dbPassword=
     * static uuid probably
     * depends on front end external config (above)
 * ability to upload more than 1 image
-* handle escaping apostraphe in string of recipe update (title for sure, not sure about content)
+* handle escaping apostraphe in string of recipe update
 * log file for web app
 * don't show empty image icon when no image for recipe
