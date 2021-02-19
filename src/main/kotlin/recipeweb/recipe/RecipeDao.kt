@@ -91,14 +91,27 @@ class RecipeDao @Inject constructor(
     }
 
     fun deleteRecipe(recipeId: String): Operation {
+        val deleteImage = "DELETE FROM image WHERE recipe_id = $recipeId"
         val deleteRecipe = "DELETE FROM recipe WHERE id = $recipeId"
         return Blocking.get {
                     connection.createStatement().use { statement: Statement ->
                         try {
-                            statement.executeUpdate(deleteRecipe)
+                            statement.executeUpdate(deleteImage)
                         } catch (exception: Exception) {
-                            log.error("Failed to delete recipe. recipe-id=$recipeId", exception)
+                            log.error("Failed to delete image. recipe-id=$recipeId", exception)
                             throw exception
+                        }
+                    }
+                }
+                .flatMap {
+                    Blocking.get {
+                        connection.createStatement().use { statement: Statement ->
+                            try {
+                                statement.executeUpdate(deleteRecipe)
+                            } catch (exception: Exception) {
+                                log.error("Failed to delete recipe. recipe-id=$recipeId", exception)
+                                throw exception
+                            }
                         }
                     }
                 }
