@@ -32,8 +32,13 @@ class RecipeService @Inject constructor(
         return recipeDao.selectAllRecipes()
     }
 
-    fun deleteRecipe(recipeId: String): Operation {
-        return recipeDao.deleteRecipe(recipeId)
+    fun deleteRecipe(recipeId: String, password: String): Operation {
+        return userService.validatePassword(password)
+                .flatMap {
+                    recipeDao.deleteRecipe(recipeId)
+                            .promise()
+                }
+                .operation()
     }
 
     fun updateRecipe(updateRequest: UpdateRecipeRequest): Promise<Recipe> {

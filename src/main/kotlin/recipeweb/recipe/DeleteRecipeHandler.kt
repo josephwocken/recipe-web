@@ -10,11 +10,12 @@ class DeleteRecipeHandler @Inject constructor(
 
     override fun handle(ctx: Context) {
         val recipeId: String? = ctx.pathTokens["id"]
-        if (null === recipeId) {
+        val password: String? = ctx.request.queryParams["pwd"]
+        if (null === recipeId || null === password) {
             ctx.response.status(422).send()
             return
         }
-        return recipeService.deleteRecipe(recipeId)
+        return recipeService.deleteRecipe(recipeId, password)
                 .then {
                     ctx.response
                             .status(200)
